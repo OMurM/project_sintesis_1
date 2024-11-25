@@ -1,0 +1,62 @@
+- Table: Users
+    Endpoints
+        /users POST
+        /users GET
+        /users/<int:id> PUT
+        /users/<int:id> DELETE
+
+- Table: Categories
+    Endpoints
+        /categories POST
+        /categories GET
+        /categories/<int:id> PUT
+        /categories/<int:id> DELETE
+
+- Table: Products
+    Endpoints
+        /products POST
+        /products GET
+        /products/<int:id> PUT
+        /products/<int:id> DELETE
+
+- Table: Orders
+    Endpoints
+        /orders POST
+        /orders GET
+        /orders/<int:id> PUT
+        /orders/<int:id> DELETE
+
+- Table: Order Details
+    Endpoints
+        /order_details POST
+        /order_details GET
+        /order_details/<int:id> PUT
+        /order_details/<int:id> DELETE
+
+- Table: Reviews
+    Endpoints
+        /reviews POST
+        /reviews GET
+        /reviews/<int:id> PUT
+        /reviews/<int:id> DELETE
+
+- Table: Suppliers
+    Endpoints
+        /suppliers POST
+        /suppliers GET
+        /suppliers/<int:id> PUT
+        /suppliers/<int:id> DELETE
+
+- Table: Purchases
+    Endpoints
+        /purchases POST
+        /purchases GET
+        /purchases/<int:id> PUT
+        /purchases/<int:id> DELETE
+
+- Table: Payments
+    Endpoints
+        /payments POST
+        /payments GET
+        /payments/<int:id> PUT
+        /payments/<int:id> DELETE

@@ -1,5 +1,2 @@
-from flask import Blueprint
-
-main = Blueprint('main', __name__)
-
-from . import users, categories, products, orders, order_details, reviews, suppliers, purchases, payments
+# utils/__init__.py
+# This file can be empty or contain initialization code for the utils module

@@ -1,12 +1,12 @@
 from flask import request, jsonify
 from . import main
 from models import db, User
-from utils.hash_utils import hashed_password, check_password
+from utils.hash_utils import hash_password, check_password
 
 @main.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json()
-    hash_password = hash_password(data.get('password'))
+    hashed_password = hash_password(data['password'])
     new_user = User(email=data['email'], password=hashed_password, phone=data.get('phone'), first_name=data['first_name'], last_name=data['last_name'])
     db.session.add(new_user)
     db.session.commit()
@@ -24,7 +24,7 @@ def update_user(id):
     if not user:
         return jsonify({'message': 'User not found'}), 404
     user.email = data['email']
-    user.password = hashed_password(data['password'])
+    user.password = hash_password(data['password'])
     user.phone = data.get('phone')
     user.first_name = data['first_name']
     user.last_name = data['last_name']
