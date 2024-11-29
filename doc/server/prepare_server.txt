@@ -14,7 +14,7 @@
     - mysql -u root -p 
     
     CREATE DATABASE sintesis_project;
-    CREATE USER 'oscar'@'%' IDENTIFIED BY 'SecurePass123!';
+    CREATE USER 'oscar'@'%' IDENTIFIED BY 'z';
     GRANT ALL PRIVILEGES ON sintesis_project.* TO 'oscar'@'%';
     FLUSH PRIVILEGES;
     EXIT;
