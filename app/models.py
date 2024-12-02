@@ -10,6 +10,16 @@ class User(db.Model):
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
 
+    def serialize(self):
+        return {
+            'user_id': self.user_id,
+            'email': self.email,
+            'phone': self.phone,
+            'first_name': self.first_name,
+            'last_name': self.last_name
+        }
+
+""""
 class Category(db.Model):
     category_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
@@ -70,3 +80,5 @@ class Payment(db.Model):
     amount = db.Column(db.Numeric(10, 2), nullable=False)
     payment_method = db.Column(db.Enum('card', 'paypal', 'transfer'), nullable=False)
     status = db.Column(db.Enum('completed', 'failed'), nullable=False)
+
+"""
