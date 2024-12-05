@@ -19,6 +19,8 @@ class User(db.Model):
             'last_name': self.last_name
         }
 
+# All comented until we move up the database on all tables.
+
 """"
 class Category(db.Model):
     category_id = db.Column(db.Integer, primary_key=True, autoincrement=True)

@@ -4,14 +4,18 @@ CREATE TABLE Users (
     password VARCHAR(255) NOT NULL,
     phone VARCHAR(20) NULL,
     first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL
+    last_name VARCHAR(100) NOT NULL,
+    image_id INT,
+    FOREIGN KEY (image_id) REFERENCES Images(image_id)
 );
 
 CREATE TABLE Categories (
     category_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
     name VARCHAR(100) NOT NULL,
     description TEXT NULL,
-    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
+    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    image_id INT,
+    FOREIGN KEY (image_id) REFERENCES Images(image_id)
 );
 
 CREATE TABLE Products (
@@ -21,7 +25,9 @@ CREATE TABLE Products (
     price DECIMAL(10, 2) NOT NULL,
     stock INT NOT NULL,
     category_id INT,
-    FOREIGN KEY (category_id) REFERENCES Categories(category_id)
+    image_id INT,
+    FOREIGN KEY (category_id) REFERENCES Categories(category_id),
+    FOREIGN KEY (image_id) REFERENCES Images(image_id)
 );
 
 CREATE TABLE Orders (
@@ -83,4 +89,13 @@ CREATE TABLE Payments (
     payment_method ENUM('card', 'paypal', 'transfer') NOT NULL,
     status ENUM('completed', 'failed') NOT NULL,
     FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+);
+
+CREATE TABLE Images (
+    image_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
+    type VARCHAR(100),
+    description TEXT NULL,
+    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    filename VARCHAR(128) NOT NULL,
+    url VARCHAR(256) NOT NULL
 );
