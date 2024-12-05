@@ -1,4 +1,4 @@
-CREATE TABLE Users (
+CREATE TABLE User (
     user_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
     email VARCHAR(100) UNIQUE,
     password_hash VARCHAR(255),
