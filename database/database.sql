@@ -84,3 +84,11 @@ CREATE TABLE Payments (
     status ENUM('completed', 'failed') NOT NULL,
     FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
+
+CREATE TABLE Images (
+    image_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
+    product_id INT,
+    image_url VARCHAR(255) NOT NULL,
+    upload_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);

@@ -10,7 +10,7 @@ def find_user(identifier, by_email=False):
 def create_user():
     data = request.get_json()
 
-    # Check is user already exists
+    # Check if user already exists
     if User.query.filter_by(email=data['email']).first():
         return jsonify({'message': 'User already exists'}), 400
     
@@ -29,7 +29,7 @@ def create_user():
 @main.route('/users', methods=['GET'])
 def get_users():
     users = User.query.all()
-    return jsonify([user.serialize() for user in users])  # Assume `serialize()` method in User model
+    return jsonify([user.serialize() for user in users])
 
 @main.route('/users/<int:id>', methods=['PUT'])
 def update_user(id):
@@ -43,15 +43,6 @@ def update_user(id):
             setattr(user, key, hash_password(data[key]) if key == 'password' else data[key])
     db.session.commit()
     return jsonify({'message': 'User updated successfully'})
-
-@main.route('/users/<int:id>', methods=['DELETE'])
-def delete_user(id):
-    user = find_user(id)
-    if not user:
-        return jsonify({'message': 'User not found'}), 404
-    db.session.delete(user)
-    db.session.commit()
-    return jsonify({'message': 'User deleted successfully'})
 
 @main.route('/users/find', methods=['GET'])
 def get_user():
@@ -67,19 +58,11 @@ def get_user():
 @main.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-
-    # Check if email and password are provided
     if not data or not data.get('email') or not data.get('password'):
         return jsonify({'message': 'Email and password are required'}), 400
-
-    # Find user by email
     user = User.query.filter_by(email=data['email']).first()
-
-    # Check if the passwords are correct
     if not user or not check_password(user.password, data['password']):
         return jsonify({'message': 'Invalid credentials'}), 401
-    
-    # Successful login
     return jsonify({
         'message': 'Login successful',
         'user': {
@@ -89,3 +72,42 @@ def login():
             'last_name': user.last_name
         }
     }), 200
+
+@main.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    if not data or not data.get('email') or not data.get('password'):
+        return jsonify({'message': 'Email and password are required'}), 400
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({'message': 'User already exists'}), 400
+    hashed_password = hash_password(data['password'])
+    new_user = User(
+        email=data['email'],
+        password=hashed_password,
+        phone=data.get('phone'),
+        first_name=data.get('first_name'),
+        last_name=data.get('last_name')
+    )
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({
+        'message': 'User registered successfully',
+        'user': {
+            'user_id': new_user.user_id,
+            'email': new_user.email,
+            'first_name': new_user.first_name,
+            'last_name': new_user.last_name
+        }
+    }), 201
+
+@main.route('/reset-password', methods=['POST'])
+def reset_password():
+    data = request.get_json()
+    if not data or not data.get('email') or not data.get('password'):
+        return jsonify({'message': 'Email and password are required'}), 400
+    user = User.query.filter_by(email=data['email']).first()
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+    user.password = hash_password(data['password'])
+    db.session.commit()
+    return jsonify({'message': 'Password reset successfully'}), 200
