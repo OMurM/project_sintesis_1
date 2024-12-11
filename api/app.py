@@ -1,26 +1,20 @@
-from flask import Config, Flask, send_from_directory, jsonify
-from models import db, Image
-import os
+from flask import Flask
+from config import Config
+from models import db
+from routes import main
+from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
-IMAGE_DIRECTORY = '/home/2DAM/images'
+# Set up Flask-JWT-Extended 
+app.config['JWT_SECRET_KEY'] = 'supersecretpassword'
+jwt = JWTManager(app)
 
-@app.route('/image/<int:image_id>', methods=['GET'])
-def get_image(image_id):
-    image = Image.query.get(image_id)
-    
-    if image:
-        image_path = os.path.join(IMAGE_DIRECTORY, image.filename)
-        
-        if os.path.exists(image_path):
-            return send_from_directory(IMAGE_DIRECTORY, image.filename)
-        else:
-            return jsonify({"error": "Image file not found"}), 404
-    else:
-        return jsonify({"error": "Image not found"}), 404
+app.register_blueprint(main)
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
