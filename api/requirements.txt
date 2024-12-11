@@ -2,3 +2,4 @@ Flask
 Flask-SQLAlchemy
 mysqlclient
 bcrypt
+Flask-JWT-Extended

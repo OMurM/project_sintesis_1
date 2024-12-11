@@ -1,8 +1,0 @@
-CREATE TABLE Images (
-    image_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
-    type VARCHAR(100),
-    description TEXT NULL,
-    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    filename VARCHAR(128) NOT NULL,
-    url VARCHAR(256) NOT NULL
-);

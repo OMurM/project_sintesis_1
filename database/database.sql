@@ -1,7 +1,16 @@
+CREATE TABLE Images (
+    image_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
+    type VARCHAR(100),
+    description TEXT NULL,
+    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    filename VARCHAR(128) NOT NULL,
+    url VARCHAR(256) NOT NULL
+);
+
 CREATE TABLE Users (
     user_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
     email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
     phone VARCHAR(20) NULL,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
@@ -13,9 +22,7 @@ CREATE TABLE Categories (
     category_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
     name VARCHAR(100) NOT NULL,
     description TEXT NULL,
-    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    image_id INT,
-    FOREIGN KEY (image_id) REFERENCES Images(image_id)
+    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Products (
@@ -25,9 +32,7 @@ CREATE TABLE Products (
     price DECIMAL(10, 2) NOT NULL,
     stock INT NOT NULL,
     category_id INT,
-    image_id INT,
-    FOREIGN KEY (category_id) REFERENCES Categories(category_id),
-    FOREIGN KEY (image_id) REFERENCES Images(image_id)
+    FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 );
 
 CREATE TABLE Orders (
