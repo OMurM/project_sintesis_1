@@ -7,7 +7,7 @@ def obtener_productos(url):
     response = requests.get(url)
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
-        productos = soup.find_all('div', class_='product')  # Asegúrate de que el selector es correcto
+        productos = soup.find_all('div', class_='product') 
         return productos
     else:
         print(f"Error al acceder a la página: {url}")
