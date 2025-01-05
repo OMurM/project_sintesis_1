@@ -13,12 +13,10 @@ def get_images_on_offer():
     products_on_offer = db.session.query(Product, Image).join(Image, Product.image_id == Image.image_id).filter(Product.offer == True).all()
 
     # Serialize the images
-    images = []
-    for product, image in products_on_offer:
-        image_data = image.serialize()
-        images.append(image_data)
+    images = [image.serialize() for product, image in products_on_offer]
         
     return jsonify(images), 200
+
 
 # Endpoint to fetch all products and their images
 @main.route('/images/all_products', methods=['GET'])
@@ -27,12 +25,9 @@ def get_all_products():
     all_products = db.session.query(Product, Image).join(Image, Product.image_id == Image.image_id).all()
 
     # Serialize the products and their associated images
-    products_with_images = []
-    for product, image in all_products:
-        product_data = product.serialize()
-        image_data = image.serialize()
-        
-        product_data['image'] = image_data
-        products_with_images.append(product_data)
+    products_with_images = [
+        {**product.serialize(), 'image': image.serialize()}
+        for product, image in all_products
+    ]
 
     return jsonify(products_with_images), 200

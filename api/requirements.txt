@@ -3,3 +3,4 @@ Flask-SQLAlchemy
 mysqlclient
 bcrypt
 Flask-JWT-Extended
+Flask Flask-SQLAlchemy

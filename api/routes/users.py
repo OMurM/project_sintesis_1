@@ -66,7 +66,9 @@ def refresh():
 
 # Utility function to find user
 def find_user(identifier, by_email=False):
-    return User.query.filter_by(email=identifier).first() if by_email else User.query.get(identifier)
+    if by_email:
+        return User.query.filter_by(email=identifier).first()
+    return User.query.get(identifier)
 
 # Create user
 @main.route('/users', methods=['POST'])
@@ -93,19 +95,27 @@ def get_users():
     users = User.query.all()
     return jsonify([user.serialize() for user in users])
 
-# Update user
-@main.route('/users/<int:id>', methods=['PUT'])
-def update_user(id):
+# Update user by email
+@main.route('/users/<string:email>', methods=['PUT'])
+def update_user_by_email(email):
     data = request.get_json()
-    user = find_user(id)
+    user = find_user(email, by_email=True)
     if not user:
         return jsonify({'message': 'User not found'}), 404
     
+    # Check if the new email is already taken
+    if 'email' in data and data['email'] != email:
+        if User.query.filter_by(email=data['email']).first():
+            return jsonify({'message': 'Email already exists'}), 400
+    
     for key in ['email', 'password', 'phone', 'first_name', 'last_name']:
         if key in data:
-            setattr(user, key, hash_password(data[key]) if key == 'password' else data[key])
+            if key == 'password':
+                setattr(user, key, hash_password(data[key]))  # Hash the password
+            else:
+                setattr(user, key, data[key])  # Update other fields
     db.session.commit()
-    return jsonify({'message': 'User updated successfully'})
+    return jsonify({'message': 'User updated successfully', 'user': user.serialize()})
 
 # Find user by email or ID
 @main.route('/users/find', methods=['GET'])
@@ -117,4 +127,12 @@ def get_user():
     if not user:
         return jsonify({'message': 'User not found'}), 404
     
+    return jsonify(user.serialize())
+
+@main.route('/user/info', methods=['GET'])
+def get_user_info():
+    email = request.args.get('email')
+    user = find_user(email, by_email=True)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
     return jsonify(user.serialize())
