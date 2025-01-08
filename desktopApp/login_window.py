@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import (
     QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QMessageBox
 )
 from api_client import APIClient
-from dashboard_window import MainWindow
+from main_window import MainWindow
 
 class LoginWindow(QMainWindow):
     

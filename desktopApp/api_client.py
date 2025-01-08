@@ -51,27 +51,79 @@ class APIClient:
         except requests.exceptions.RequestException as e:
             raise ConnectionError(f"API connection error: {e}")
 
-    def update_user(self, user_id, email=None, password=None, first_name=None, last_name=None, phone=None):
-        """Update a user's details."""
+    def update_user(self, email, user_data):
+        """Send a PUT request to update user details."""
+        url = f"{API_URL}/users/{email}"
         headers = {"Authorization": f"Bearer {self.token}"}
-        data = {}
-        if email:
-            data['email'] = email
-        if password:
-            data['password'] = password
-        if first_name:
-            data['first_name'] = first_name
-        if last_name:
-            data['last_name'] = last_name
-        if phone:
-            data['phone'] = phone
-        
         try:
-            response = requests.put(f"{API_URL}/users/{user_id}", json=data, headers=headers)
+            response = requests.put(url, json=user_data, headers=headers)
             return response
         except requests.exceptions.RequestException as e:
             raise ConnectionError(f"API connection error: {e}")
 
+    def delete_user(self, email):
+        """Delete a user by email."""
+        url = f"{API_URL}/users/{email}"
+        headers = {"Authorization": f"Bearer {self.token}"}
+        try:
+            response = requests.delete(url, headers=headers)
+            return response
+        except requests.exceptions.RequestException as e:
+            raise ConnectionError(f"API connection error: {e}")
+
+    # Product Management
+    def fetch_products(self):
+        """Fetch all products along with their images."""
+        headers = {"Authorization": f"Bearer {self.token}"}
+        try:
+            response = requests.get(f"{API_URL}/images/all_products", headers=headers)
+            if response.status_code == 200:
+                return response.json()  # Return the parsed JSON data (a list of products)
+            else:
+                return []  # If the response code is not 200, return an empty list
+        except requests.exceptions.RequestException as e:
+            raise ConnectionError(f"API connection error: {e}")
+
+    def get_product_by_name(self, product_name):
+        """Fetch a product by its name."""
+        headers = {"Authorization": f"Bearer {self.token}"}
+        try:
+            response = requests.get(f"{API_URL}/products/{product_name}", headers=headers)
+            return response
+        except requests.exceptions.RequestException as e:
+            raise ConnectionError(f"API connection error: {e}")
+
+    def create_product(self, product_data):
+        """Send a POST request to create a new product."""
+        url = f"{API_URL}/products"
+        headers = {"Authorization": f"Bearer {self.token}"}
+        try:
+            response = requests.post(url, json=product_data, headers=headers)
+            return response
+        except requests.exceptions.RequestException as e:
+            raise ConnectionError(f"API connection error: {e}")
+
+    def update_product(self, product_name, product_data):
+        """Send a PUT request to update product details."""
+        url = f"{API_URL}/products/{product_name}"
+        headers = {"Authorization": f"Bearer {self.token}"}
+        try:
+            response = requests.put(url, json=product_data, headers=headers)
+            return response
+        except requests.exceptions.RequestException as e:
+            raise ConnectionError(f"API connection error: {e}")
+
+    def delete_product(self, product_name):
+        """Delete a product by its name."""
+        url = f"{API_URL}/products/{product_name}"
+        headers = {"Authorization": f"Bearer {self.token}"}
+        try:
+            response = requests.delete(url, headers=headers)
+            return response
+        except requests.exceptions.RequestException as e:
+            raise ConnectionError(f"API connection error: {e}")
+
+    # Token management
     def refresh_token(self):
         """Refresh the JWT token."""
         headers = {"Authorization": f"Bearer {self.token}"}
